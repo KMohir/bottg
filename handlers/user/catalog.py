@@ -12,7 +12,7 @@ from filters import IsUser
 
 @dp.message_handler(IsUser(), text=catalog)
 async def process_catalog(message: Message):
-    await message.answer("Mahsulotlarni ko'rish uchun bo'limni tanlang:",
+    await message.answer("Выберите раздел для просмотра продуктов:",
                          reply_markup=categories_markup())
 
 
@@ -34,7 +34,7 @@ async def add_product_callback_handler(query: CallbackQuery, callback_data: dict
     db.query('INSERT INTO cart VALUES (?, ?, 1)',
              (query.message.chat.id, callback_data['id']))
 
-    await query.answer("Mahsulot Savatga qo'shildi!")
+    await query.answer("Товар добавлен в корзину можете зайти в корзину и оформить заказ!")
     await query.message.delete()
 
 
@@ -42,7 +42,7 @@ async def show_products(m, products):
 
     if len(products) == 0:
 
-        await m.answer("Bu erda hech narsa yo'q 😢")
+        await m.answer("Вы добавили все товары в корзинку можете зайти в корзину и оформить заказ")
 
     else:
 

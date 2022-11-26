@@ -1,5 +1,9 @@
 
 import os
+import time
+
+
+
 import handlers
 from aiogram import executor, types
 from aiogram.types import ReplyKeyboardMarkup, ReplyKeyboardRemove
@@ -15,7 +19,6 @@ WEBAPP_PORT = int(os.environ.get("PORT", 5000))
 user_message = 'userAbu'
 admin_message = 'Админ'
 
-
 # @dp.message_handler(commands='start')
 # async def cmd_start(message: types.Message):
 #
@@ -25,6 +28,7 @@ admin_message = 'Админ'
 #
 #     await message.answer('''Assalomu Alaykum menu kormoqchi bolsangiz /menu ni bosing
 #     ''')
+
 
 
 @dp.message_handler(text=user_message)
@@ -46,7 +50,10 @@ async def admin_mode(message: types.Message):
 
     await message.answer('Включен админский режим.', reply_markup=ReplyKeyboardRemove())
 
+async def send_messange():
+    logging.basicConfig(level=logging.INFO)
 
+    await bot.send_message(chat_id=452785654,text='111111')
 async def on_startup(dp):
     logging.basicConfig(level=logging.INFO)
     db.create_tables()
@@ -55,12 +62,14 @@ async def on_startup(dp):
     await bot.set_webhook(config.WEBHOOK_URL)
 
 
+
 async def on_shutdown():
     logging.warning("Shutting down..")
     await bot.delete_webhook()
     await dp.storage.close()
     await dp.storage.wait_closed()
     logging.warning("Bot down")
+
 
 
 if __name__ == '__main__':

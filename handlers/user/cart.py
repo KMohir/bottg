@@ -61,8 +61,7 @@ async def process_cart(message: Message, state: FSMContext):
 
         if order_cost != 0:
             markup = ReplyKeyboardMarkup(resize_keyboard=True, selective=True)
-            markup.add('    ')
-
+            markup.add('📦 Оформить заказ')
             await message.answer('Перейти к оформлению?',
                                  reply_markup=markup)
 
@@ -70,6 +69,7 @@ async def process_cart(message: Message, state: FSMContext):
 @dp.callback_query_handler(IsUser(), product_cb.filter(action='count'))
 @dp.callback_query_handler(IsUser(), product_cb.filter(action='increase'))
 @dp.callback_query_handler(IsUser(), product_cb.filter(action='decrease'))
+@dp.callback_query_handler(IsUser(), product_cb.filter(action='delete'))
 async def product_callback_handler(query: CallbackQuery, callback_data: dict, state: FSMContext):
 
     idx = callback_data['id']
@@ -95,14 +95,31 @@ async def product_callback_handler(query: CallbackQuery, callback_data: dict, st
 
                     await process_cart(query.message, state)
 
+
                 else:
+
                     if 'increase' == action:
+
                         data['products'][idx][2] += 1
 
-                    elif data['products'][idx][2]>10 and 'decrease'==action:
-                        data['products'][idx][2] -= 1
-                    elif data['products'][idx][2]<10 and 'decrease'==action:
-                        await query.answer('10 tadan kam maxsulot buyurtma qila olmaysiz')
+                    elif 'decrease' == action:
+                        if data['products'][idx][2] > 10 :
+
+
+                            data['products'][idx][2] -= 1
+                        else:
+                            print()
+
+
+
+                    elif 'delete' == action:
+
+                        data['products'][idx][2] -= data['products'][idx][2]
+
+
+
+
+
                     count_in_cart = data['products'][idx][2]
 
                     if count_in_cart == 0:
@@ -199,7 +216,7 @@ async def process_address(message: Message, state: FSMContext):
 
     async with state.proxy() as data:
         data['address'] = message.text
-        print( data['address'])
+
 
     await message.answer(
 
@@ -236,7 +253,7 @@ async def location(message: Message,state:FSMContext):
     answer = ''
     total_price = 0
     for x in cart_data:
-        print(x[0])
+
         quantity = db.fetchone(
             'SELECT quantity FROM cart WHERE cid=? and idx=?', (message.chat.id,x[0],))
         prodyct_name = db.fetchone(

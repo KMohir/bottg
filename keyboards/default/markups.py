@@ -1,12 +1,10 @@
 from aiogram.types import ReplyKeyboardMarkup
-
-
-
-back_message = '👈 Orqaga'
-confirm_message = '✅ Buyurtmani tasdiqlash'
-all_right_message = "✅ Hammasi to'g'ri"
-cancel_message = '🚫 Bekor qilish'
-catalog = '🍽Katalog'
+back_message = '👈 Назад'
+confirm_message = '✅ Подтверждение заказа'
+all_right_message = "✅ Все правильно"
+cancel_message = '🚫 Отмена'
+catalog = '🍽Каталог'
+cart = '🛒 Корзинка'
 def confirm_markup():
     markup = ReplyKeyboardMarkup(resize_keyboard=True, selective=True)
     markup.add(confirm_message)
@@ -36,5 +34,6 @@ def yangiz():
     markup = ReplyKeyboardMarkup(resize_keyboard=True, selective=True)
     markup.row(catalog)
 
+    markup.row(cart)
     return markup
 
